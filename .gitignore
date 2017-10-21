@@ -1,0 +1,5 @@
+annotations/
+images/
+*.tar.gz
+__pycache__/
+.idea/
