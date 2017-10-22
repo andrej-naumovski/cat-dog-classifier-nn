@@ -1,10 +1,41 @@
-import cv2
 import image_utils
 import time
 import numpy as np
 import nn.config
 import nn.nn
 import tensorflow as tf
+
+
+def print_test_accuracy(test_data_images, test_data_labels, test_data_classes, predicted_classes):
+    test_batch_size = 256
+    num_test = len(test_data_images)
+    print(num_test)
+    prediction_classes = np.zeros(shape=num_test, dtype=np.int)
+    i = 0
+    while i < num_test:
+        j = min(i + test_batch_size, num_test)
+        print(i, j)
+        images_batch = test_data_images[i:j, :]
+        labels_batch = test_data_labels[i:j, :]
+
+        feed_dict_test = {
+            x: images_batch,
+            y_true: labels_batch
+        }
+
+        prediction_classes[i:j] = session.run(predicted_classes, feed_dict=feed_dict_test)
+
+        i = j
+
+    class_true = test_data_classes
+
+    correct = (class_true == prediction_classes)
+    correct_sum = correct.sum()
+
+    test_accuracy = float(correct_sum) / num_test
+
+    print('Test accuracy', test_accuracy)
+
 
 time_to_process = time.time()
 
@@ -70,5 +101,5 @@ num_iterations = 1000
 #         acc = session.run(accuracy, feed_dict=feed_dict_train)
 #         print('Accuracy', acc)
 
-nn.nn.print_test_accuracy(test_data_images=images_test, test_data_labels=labels_test, test_data_classes=classes_test,
-                          predicted_classes=y_prediction_class, session=session)
+print_test_accuracy(test_data_images=images_test, test_data_labels=labels_test, test_data_classes=classes_test,
+                    predicted_classes=y_prediction_class)

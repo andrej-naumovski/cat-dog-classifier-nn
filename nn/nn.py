@@ -47,35 +47,3 @@ def generate_fc_layer(input, num_inputs, num_outputs, use_relu=True):
         layer = tf.nn.relu(layer)
 
     return layer
-
-
-def print_test_accuracy(test_data_images, test_data_labels, test_data_classes, predicted_classes, session):
-    test_batch_size = 256
-    num_test = len(test_data_images)
-    print(num_test)
-    prediction_classes = np.zeros(shape=num_test, dtype=np.int)
-
-    i = 0
-    while i < num_test:
-        j = min(i + test_batch_size, num_test)
-        print(i, j)
-        images = test_data_images[i:j, :]
-        labels = test_data_labels[i:j, :]
-
-        feed_dict_test = {
-            'x': images,
-            'y_true': labels
-        }
-
-        prediction_classes[i:j] = session.run(predicted_classes, feed_dict=feed_dict_test)
-
-        i = j
-
-    class_true = test_data_classes
-
-    correct = (class_true == prediction_classes)
-    correct_sum = correct.sum()
-
-    test_accuracy = float(correct_sum) / num_test
-
-    print('Test accuracy', test_accuracy)
