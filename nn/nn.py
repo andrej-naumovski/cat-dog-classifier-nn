@@ -11,7 +11,7 @@ def new_biases(length):
     return tf.Variable(tf.constant(0.05, shape=[length]))
 
 
-def generate_conv_layer(input, num_channels, layer_data, use_pooling=True):
+def generate_conv_layer(input, num_channels, layer_data, use_pooling=True, use_relu=True):
     shape = [layer_data['filter_size'], layer_data['filter_size'], num_channels, layer_data['num_filters']]
 
     weights = new_weights(shape)
@@ -23,7 +23,8 @@ def generate_conv_layer(input, num_channels, layer_data, use_pooling=True):
     if use_pooling:
         layer = tf.nn.max_pool(value=layer, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
-    layer = tf.nn.relu(layer)
+    if use_relu:
+        layer = tf.nn.relu(layer)
 
     return layer, weights
 

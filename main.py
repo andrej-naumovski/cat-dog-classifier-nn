@@ -54,21 +54,36 @@ y_true = tf.placeholder(tf.float32, [None, nn.config.num_classes])
 y_true_cls = tf.argmax(y_true, axis=1)
 
 conv_layer1, weights1 = nn.nn.generate_conv_layer(x_image, num_channels=nn.config.num_channels,
-                                                  layer_data=nn.config.layer1)
+                                                  layer_data=nn.config.layer1, use_pooling=False)
 
 conv_layer2, weights2 = nn.nn.generate_conv_layer(conv_layer1, num_channels=nn.config.layer1['num_filters'],
-                                                  layer_data=nn.config.layer2)
+                                                  layer_data=nn.config.layer2, use_relu=False)
 
 conv_layer3, weights3 = nn.nn.generate_conv_layer(conv_layer2, num_channels=nn.config.layer2['num_filters'],
-                                                  layer_data=nn.config.layer3)
+                                                  layer_data=nn.config.layer3, use_relu=False)
 
-layer_flat, num_features = nn.nn.flatten_layer(conv_layer3)
+conv_layer4, weights4 = nn.nn.generate_conv_layer(conv_layer3, num_channels=nn.config.layer3['num_filters'],
+                                                  layer_data=nn.config.layer4, use_relu=False, use_pooling=False)
+
+conv_layer5, weights5 = nn.nn.generate_conv_layer(conv_layer4, num_channels=nn.config.layer4['num_filters'],
+                                                  layer_data=nn.config.layer5, use_relu=False)
+
+conv_layer6, weights6 = nn.nn.generate_conv_layer(conv_layer5,  num_channels=nn.config.layer5['num_filter'],
+                                                  layer_data=nn.config.layer6, use_relu=False, use_pooling=False)
+
+conv_layer7, weights7 = nn.nn.generate_conv_layer(conv_layer6, num_channels=nn.config.layer6['num_filters'],
+                                                  layer_data=nn.config.layer7, use_relu=False)
+
+conv_layer8, weights8 = nn.nn.generate_conv_layer(conv_layer7, num_channels=nn.config.layer7['num_filters'],
+                                                  layer_data=nn.config.layer8, use_relu=False, use_pooling=False)
+
+layer_flat, num_features = nn.nn.flatten_layer(conv_layer6)
 
 layer_fc1 = nn.nn.generate_fc_layer(layer_flat, num_inputs=num_features, num_outputs=nn.config.fully_connected_size,
                                     use_relu=True)
 
 layer_fc2 = nn.nn.generate_fc_layer(layer_fc1, num_inputs=nn.config.fully_connected_size,
-                                    num_outputs=nn.config.num_classes, use_relu=False)
+                                    num_outputs=nn.config.num_classes, use_relu=True)
 
 y_prediction = tf.nn.softmax(layer_fc2)
 y_prediction_class = tf.argmax(y_prediction, axis=1)
