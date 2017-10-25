@@ -68,7 +68,7 @@ conv_layer4, weights4 = nn.nn.generate_conv_layer(conv_layer3, num_channels=nn.c
 conv_layer5, weights5 = nn.nn.generate_conv_layer(conv_layer4, num_channels=nn.config.layer4['num_filters'],
                                                   layer_data=nn.config.layer5, use_relu=False)
 
-conv_layer6, weights6 = nn.nn.generate_conv_layer(conv_layer5,  num_channels=nn.config.layer5['num_filter'],
+conv_layer6, weights6 = nn.nn.generate_conv_layer(conv_layer5, num_channels=nn.config.layer5['num_filters'],
                                                   layer_data=nn.config.layer6, use_relu=False, use_pooling=False)
 
 conv_layer7, weights7 = nn.nn.generate_conv_layer(conv_layer6, num_channels=nn.config.layer6['num_filters'],
@@ -105,16 +105,16 @@ train_batch_size = 64
 total_iterations = 0
 num_iterations = 1000
 
-# for i in range(num_iterations):
-#     batch = image_utils.generate_batch(images, labels, train_batch_size)
-#     feed_dict_train = {
-#         x: batch['images'],
-#         y_true: batch['labels']
-#     }
-#     session.run(optimizer, feed_dict=feed_dict_train)
-#     if i % 100 == 0 or i == num_iterations - 1:
-#         acc = session.run(accuracy, feed_dict=feed_dict_train)
-#         print('Accuracy', acc)
+for i in range(num_iterations):
+    batch = image_utils.generate_batch(images, labels, train_batch_size)
+    feed_dict_train = {
+        x: batch['images'],
+        y_true: batch['labels']
+    }
+    session.run(optimizer, feed_dict=feed_dict_train)
+    if i % 100 == 0 or i == num_iterations - 1:
+        acc = session.run(accuracy, feed_dict=feed_dict_train)
+        print('Accuracy', acc)
 
 print_test_accuracy(test_data_images=images_test, test_data_labels=labels_test, test_data_classes=classes_test,
                     predicted_classes=y_prediction_class)

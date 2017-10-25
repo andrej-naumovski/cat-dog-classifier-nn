@@ -31,7 +31,7 @@ layer6 = {
 layer7 = {
     'filter_size': 2,
     'num_filters': 72
-},
+}
 
 layer8 = {
     'filter_size': 1,
